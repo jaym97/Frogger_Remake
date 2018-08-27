@@ -6,12 +6,15 @@ var Enemy = function() {
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
+    this.x = 0;
+    this.y;
+    this.speed = 50;
 };
 
-// Update the enemy's position, required method for game
+// Update the enemy's position. Reset position if enemy has reached end of canvas
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
-
+    this.x > 505 ? this.x = 0 : this.x += this.speed * dt;
 };
 
 // Draw the enemy on the screen, required method for game
@@ -50,6 +53,10 @@ class Player {
 
 const enemy1 = new Enemy(), enemy2 = new Enemy(), enemy3 = new Enemy(), enemy4 = new Enemy(), enemy5 = new Enemy(), enemy6 = new Enemy(),
                 enemy7 = new Enemy(), enemy8 = new Enemy();
+
+enemy1.y, enemy2.y = 60;
+enemy3.y, enemy4.y, enemy8.y = 145;
+enemy5.y, enemy6.y, enemy7.y = 230;
 
 const allEnemies = [enemy1, enemy2, enemy3, enemy4, enemy5, enemy6, enemy7, enemy8];
 
