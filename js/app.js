@@ -15,6 +15,13 @@ var Enemy = function() {
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
     this.x > 505 ? this.x = 0 : this.x += this.speed * dt;
+
+    //check for collisions
+    //TODO Replace to a reset function
+    if (player.x < this.x + 75 && player.x + 75 > this.x && player.y < this.y + 50 && 50 + player.y > this.y){
+        player.x = 200;
+        player.y = 315;
+    }
 };
 
 // Draw the enemy on the screen, required method for game
