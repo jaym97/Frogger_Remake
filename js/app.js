@@ -73,7 +73,6 @@ class Player {
         : key === 'down' && this.y < 400 ? this.y += 85
         : key === 'down' && this.y > 400 ? this.y = 400
         : this.x = this.x, this.y = this.y;
-
     }
 }
 
@@ -110,7 +109,72 @@ document.addEventListener('keyup', function(e) {
     //Check if player has reached water then send it back to the fields.
     //TODO: change to a function call that handles input with a scoring system
     if(player.y < 0){
-        player.y = 315;
-        player.x = 200;
+        setTimeout(() => {
+            player.y = 315;
+            player.x = 200;
+        }, 2000);
     }
 });
+
+
+let clientX = null, clientY = null;
+
+//Listener events for touch inputs. Adapted from https://developer.mozilla.org/en-US/docs/Web/API/Touch/clientX
+//clients are initially set to null and then reset to null after event has been handled to avoid jeopardizing touch position calculations
+document.addEventListener('touchstart', (e) => {
+
+    clientX = e.touches[0].clientX;
+    clientY = e.touches[0].clientY;
+
+    document.addEventListener('touchmove', (e) => {
+
+        if (clientY === null){
+            return;
+        }
+
+        if (clientX === null){
+            return;
+        }
+
+        let deltaX, deltaY;
+
+        deltaX = e.changedTouches[0].clientX - clientX;
+        deltaY = e.changedTouches[0].clientY - clientY;
+
+        //process left swipe
+        Math.abs(deltaX) > Math.abs(deltaY) && (deltaX > 0 && player.x < 400) ? player.x += 100
+        //prevent player from going off canvas
+        : Math.abs(deltaX) > Math.abs(deltaY) && (deltaX > 0 && player.x > 400) ? player.x = 400
+
+        //process right swipe
+        : Math.abs(deltaX) > Math.abs(deltaY) && (deltaX < 0 && player.x > 0) ? player.x -= 100
+        //prevent player from going off canvas
+        : Math.abs(deltaX) > Math.abs(deltaY) && (deltaX < 0 && player.x < 0) ? player.x = 0
+
+        //process upward swipe
+        : deltaY < 0 && deltaX <= 0 && player.y > 0 ? player.y -= 85
+        //prevent player from going off screen
+        : deltaY < 0 && player.y < 0 ? player.y = -25
+
+        //process downward swipe
+        : deltaY > 0 && deltaX <= 0 && player.y < 400 ? player.y += 85
+        //prevent player from going off canvas
+        : deltaY > 0 && player.y > 400 ? player.y = 400
+
+        //leave player in current position if other conditions are not met
+        : player.x = player.x, player.y = player.y;
+
+        //TODO Replace with a reset function
+        if (player.y < 0){
+            setTimeout(() => {
+                player.x = 200;
+                player.y = 315;
+            }, 1000);
+        }
+
+        clientX = null;
+        clientY = null;
+
+    }, false);
+}, false);
+
