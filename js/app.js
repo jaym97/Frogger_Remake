@@ -126,7 +126,7 @@ document.addEventListener('keyup', function(e) {
 
 let clientX = null, clientY = null;
 
-//Listener events for touch inputs. Adapted from https://developer.mozilla.org/en-US/docs/Web/API/Touch/clientX
+//Event handlers for touch inputs. Adapted from https://developer.mozilla.org/en-US/docs/Web/API/Touch/clientX
 //clients are initially set to null and then reset to null after event has been handled to avoid jeopardizing touch position calculations
 document.addEventListener('touchstart', (e) => {
 
@@ -147,6 +147,7 @@ document.addEventListener('touchstart', (e) => {
 
         deltaX = e.changedTouches[0].clientX - clientX;
         deltaY = e.changedTouches[0].clientY - clientY;
+        console.log(`deltaX = ${deltaX} deltaY = ${deltaY}`);
 
         //process left swipe
         Math.abs(deltaX) > Math.abs(deltaY) && (deltaX > 0 && player.x < 400) ? player.x += 100
@@ -159,12 +160,13 @@ document.addEventListener('touchstart', (e) => {
         : Math.abs(deltaX) > Math.abs(deltaY) && (deltaX < 0 && player.x < 0) ? player.x = 0
 
         //process upward swipe
-        : deltaY < 0 && deltaX <= 0 && player.y > 0 ? player.y -= 85
+        //add a check for deltaX to prevent large horizontal swipes being misread as vertical ones
+        : deltaY < 0 && (deltaX >= -10 && deltaX <= 10) && Math.abs(deltaY) > deltaX && player.y > 0 ? player.y -= 85
         //prevent player from going off screen
         : deltaY < 0 && player.y < 0 ? player.y = -25
 
         //process downward swipe
-        : deltaY > 0 && deltaX <= 0 && player.y < 400 ? player.y += 85
+        : deltaY > 0 && (deltaX >= -10 && deltaX <= 10) && deltaY > deltaX && player.y < 400 ? player.y += 85
         //prevent player from going off canvas
         : deltaY > 0 && player.y > 400 ? player.y = 400
 
