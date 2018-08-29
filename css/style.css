@@ -8,7 +8,7 @@ body {
 .player-choice_modal {
 	position: absolute;
 	width: 100%;
-	height: 100vh;
+	height: 100%;
 	background-color: rgba(0, 0, 0, 0.4);
 	z-index: 30;
 }
@@ -47,4 +47,25 @@ body {
 	height: 35px;
 	border-radius: 25px;
 	border: 0.5px solid transparent;
+}
+
+@media screen and (max-width: 510px) {
+	.player-choice_modal {
+		height: 130vh;
+		width: 130vw;
+	}
+}
+
+@media screen and (max-width: 399px) {
+	.player-choice_modal {
+		height: 140%;
+		width: 140vw;
+	}
+}
+
+@media screen and (max-width: 359px) {
+	.player-choice_modal {
+		height: 165vh;
+		width: 162vw;
+	}
 }

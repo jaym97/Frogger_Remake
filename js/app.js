@@ -16,11 +16,10 @@ var Enemy = function() {
 Enemy.prototype.update = function(dt) {
     this.x > 505 ? this.x = 0 : this.x += this.speed * dt;
 
-    //check for collisions
-    //TODO Replace to a reset function
-    if (player.x < this.x + 75 && player.x + 75 > this.x && player.y < this.y + 50 && 50 + player.y > this.y){
-        player.x = 200;
-        player.y = 315;
+    // Detect collision between enemy and player
+    // Adapted from https://developer.mozilla.org/en-US/docs/Games/Tutorials/2D_Breakout_game_pure_JavaScript/Collision_detection
+    if (player.x + 70 > this.x && player.x < this.x + 75 && player. y + 50 > this.y && player.y < this.y + 50){
+        resetPlayer();
     }
 };
 
@@ -49,7 +48,10 @@ nextBtn.addEventListener('click', () => {
 });
 
 prevBtn.addEventListener('click', () => {
-    index > 1 ? index-- : index = 0;
+    index > 4 ? index = 0
+    : index <= 0 ? index = 4
+    : index--;
+
     character.setAttribute('src', characters[index]);
 });
 
@@ -66,6 +68,8 @@ class Player {
         this.y = 315;
         this.x = 200;
         this.sprite;
+        const canvas = document.getElementById('canvas');
+
     }
 
     update(dt) {
@@ -107,6 +111,10 @@ const allEnemies = [enemy1, enemy2, enemy3, enemy4, enemy5, enemy6, enemy7, enem
 
 const player = new Player();
 
+function resetPlayer() {
+    player.y = 315;
+    player.x = 200;
+}
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
@@ -123,20 +131,16 @@ document.addEventListener('keyup', function(e) {
     //Check if player has reached water then send it back to the fields.
     //TODO: change to a function call that handles input with a scoring system
     if(player.y < 0){
-        setTimeout(() => {
-            player.y = 315;
-            player.x = 200;
-        }, 2000);
+        setTimeout(resetPlayer, 1000);
     }
 });
-
 
 let clientX = null, clientY = null;
 
 //Event handlers for touch inputs. Adapted from https://developer.mozilla.org/en-US/docs/Web/API/Touch/clientX
 //clients are initially set to null and then reset to null after event has been handled to avoid jeopardizing touch position calculations
 document.addEventListener('touchstart', (e) => {
-
+    console.log(canvas);
     clientX = e.touches[0].clientX;
     clientY = e.touches[0].clientY;
 
@@ -181,10 +185,7 @@ document.addEventListener('touchstart', (e) => {
 
         //TODO Replace with a reset function
         if (player.y < 0){
-            setTimeout(() => {
-                player.x = 200;
-                player.y = 315;
-            }, 1000);
+            setTimeout(resetPlayer, 1000);
         }
 
         clientX = null;
@@ -192,4 +193,5 @@ document.addEventListener('touchstart', (e) => {
 
     }, false);
 }, false);
+
 
