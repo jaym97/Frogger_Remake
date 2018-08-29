@@ -29,27 +29,34 @@ Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
-// const characters = ['images/char-boy.png',
-//                     'images/char-cat-girl.png',
-//                     'images/char-horn-girl.png',
-//                     'images/char-pink-girl.png',
-//                     'images/char-princess-girl.png'],
-//         character = document.getElementById('player-sprite'),
-//         nextBtn = document.getElementById('next'),
-//         selectBtn = document.getElementById('select'),
-//         choiceModal = document.querySelector('.player-choice_modal');
+const characters = ['images/char-boy.png',
+                    'images/char-cat-girl.png',
+                    'images/char-horn-girl.png',
+                    'images/char-pink-girl.png',
+                    'images/char-princess-girl.png'],
+    character = document.getElementById('player-sprite'),
+    nextBtn = document.getElementById('next'),
+    prevBtn = document.getElementById('previous'),
+    selectBtn = document.getElementById('select'),
+    choiceModal = document.querySelector('.player-choice_modal');
 
-//  let index = 0, selectedPlayer;
 
-//   nextBtn.addEventListener('click', () => {
-//             index > 3 ? index = 0 : index++;
-//             character.setAttribute('src', characters[index]);
-//             return selectedPlayer = characters[index];
+let index = 0;
 
-//             selectBtn.addEventListener('click', () => {
-//                 choiceModal.setAttribute('style', 'display: none');
-//             });
-//         });
+nextBtn.addEventListener('click', () => {
+    index > 3 ? index = 0 : index++;
+    character.setAttribute('src', characters[index]);
+});
+
+prevBtn.addEventListener('click', () => {
+    index > 1 ? index-- : index = 0;
+    character.setAttribute('src', characters[index]);
+});
+
+selectBtn.addEventListener('click', () => {
+    choiceModal.setAttribute('style', 'display: none');
+    player.sprite = characters[index];
+});
 
 // Now write your own player class
 // This class requires an update(), render() and
@@ -58,6 +65,7 @@ class Player {
     constructor() {
         this.y = 315;
         this.x = 200;
+        this.sprite;
     }
 
     update(dt) {
@@ -65,7 +73,6 @@ class Player {
     }
 
     render() {
-        this.sprite = 'images/char-boy.png';
         ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
     }
 
@@ -147,7 +154,6 @@ document.addEventListener('touchstart', (e) => {
 
         deltaX = e.changedTouches[0].clientX - clientX;
         deltaY = e.changedTouches[0].clientY - clientY;
-        console.log(`deltaX = ${deltaX} deltaY = ${deltaY}`);
 
         //process left swipe
         Math.abs(deltaX) > Math.abs(deltaY) && (deltaX > 0 && player.x < 400) ? player.x += 100

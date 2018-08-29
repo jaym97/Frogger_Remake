@@ -147,14 +147,19 @@ var Engine = (function(global) {
      * on your enemy and player entities within app.js
      */
     function renderEntities() {
-        /* Loop through all of the objects within the allEnemies array and call
+        /* Check if player has been selected then
+         * loop through all of the objects within the allEnemies array and call
          * the render function you have defined.
          */
-        allEnemies.forEach(function(enemy) {
-            enemy.render();
-        });
 
-        player.render();
+        if (doc.querySelector('.player-choice_modal').style.display === 'none'){
+        	allEnemies.forEach(function(enemy) {
+            	enemy.render();
+        	});
+
+        	player.render();
+        }
+
     }
 
     /* This function does nothing but it could have been a good place to
