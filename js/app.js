@@ -1,34 +1,4 @@
-// Enemies our player must avoid
-var Enemy = function() {
-    // Variables applied to each of our instances go here,
-    // we've provided one for you to get started
-
-    // The image/sprite for our enemies, this uses
-    // a helper we've provided to easily load images
-    this.sprite = 'images/enemy-bug.png';
-    this.x = 0;
-    const possibleYValues = [60, 145, 230];
-    this.y = possibleYValues[Math.floor(Math.random() * possibleYValues.length)];
-    this.speed = Math.floor(Math.random() * (210 - 60 + 1)) + 60;
-};
-
-// Update the enemy's position. Reset position if enemy has reached end of canvas
-// Parameter: dt, a time delta between ticks
-Enemy.prototype.update = function(dt) {
-    this.x > 505 ? this.x = Math.random() * -890 : this.x += this.speed * dt;
-
-    // Detect collision between enemy and player
-    // Adapted from https://developer.mozilla.org/en-US/docs/Games/Tutorials/2D_Breakout_game_pure_JavaScript/Collision_detection
-    if (player.x + 70 > this.x && player.x < this.x + 85 && player. y + 50 > this.y && player.y < this.y + 50){
-        resetPlayer();
-    }
-};
-
-// Draw the enemy on the screen, required method for game
-Enemy.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-};
-
+// Declare globals
 const characters = ['images/char-boy.png',
                     'images/char-cat-girl.png',
                     'images/char-horn-girl.png',
@@ -38,41 +8,70 @@ const characters = ['images/char-boy.png',
     nextBtn = document.getElementById('next'),
     prevBtn = document.getElementById('previous'),
     selectBtn = document.getElementById('select'),
-    choiceModal = document.querySelector('.player-choice_modal');
-
+    choiceModal = document.querySelector('.player-choice_modal'),
+    lives = document.querySelector('#lives-text');
 
 let index = 0;
 
-nextBtn.addEventListener('click', () => {
-    index > 3 ? index = 0 : index++;
-    character.setAttribute('src', characters[index]);
-});
+/** Objects **/
 
-prevBtn.addEventListener('click', () => {
-    index > 4 ? index = 0
-    : index <= 0 ? index = 4
-    : index--;
+// Enemy object the player must avoid
+class Enemy {
+    constructor() {
+        // The image/sprite for our enemies, this uses
+        // a helper we've provided to easily load images
+        this.sprite = 'images/enemy-bug.png';
+        this.x = 0;
+        const possibleYValues = [60, 145, 230];
+        this.y = possibleYValues[Math.floor(Math.random() * possibleYValues.length)];
+        this.speed = Math.floor(Math.random() * (210 - 60 + 1)) + 60;
+    };
 
-    character.setAttribute('src', characters[index]);
-});
+    // Update the enemy's position. Reset position if enemy has reached end of canvas
+    // Parameter: dt, a time delta between ticks
+    update(dt) {
+        lives.textContent = `${this.livesLeft}`;
+        this.x > 505 ? this.x = Math.random() * -890 : this.x += this.speed * dt;
+    }
 
-selectBtn.addEventListener('click', () => {
-    choiceModal.setAttribute('style', 'display: none');
-    player.sprite = characters[index];
-});
+    // Draw the enemy on the screen, required method for game
+    render() {
+        ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    }
+}
 
-// Now write your own player class
-// This class requires an update(), render() and
-// a handleInput() method.
+
+// Player object
 class Player {
     constructor() {
         this.y = 315;
         this.x = 200;
         this.sprite;
+        this.livesLeft = 5;
     }
 
     update(dt) {
+        lives.textContent = `${this.livesLeft}`;
 
+        // Detect collision between enemy and player
+        // Adapted from https://developer.mozilla.org/en-US/docs/Games/Tutorials/2D_Breakout_game_pure_JavaScript/Collision_detection
+        allEnemies.forEach(enemy => {
+            if (this.x + 70 > enemy.x && this.x < enemy.x + 85 && this. y + 50 > enemy.y && this.y < enemy.y + 50){
+                resetPlayer();
+                if(this.livesLeft === 0){
+                    this.livesLeft = 0;
+                }
+                else {
+                    lives.textContent = `${this.livesLeft--}`;
+
+                    if (this.livesLeft === 0){
+                        this.livesLeft = 5;
+                        resetPlayer();
+                        console.log('Display game over modal');
+                    }
+                }
+            }
+        });
     }
 
     render() {
@@ -94,6 +93,7 @@ class Player {
 }
 
 
+// Gem object to increase score when collected
 class Gem {
     constructor(x, y) {
         this.x = x;
@@ -115,12 +115,13 @@ class Gem {
             xPositions = [400, 300, 200, 100],
             yPositions = [230, 145, 60];
 
+            let xPosition = xPositions[Math.floor(Math.random() * xPositions.length)];
+            let yPosition = yPositions[Math.floor(Math.random() * yPositions.length)];
+
         // Check if player has 'picked up' a gem and respawn a random gem
         // Check detection adapted from player-enemy collision with a few tweaks to account for the size of the gem
         if (player.x + 70 > this.x && player.x < this.x + 95 && player. y + 50 > this.y && player.y < this.y + 70){
             this.sprite = gemsArray[Math.floor(Math.random() * gemsArray.length)];
-            let xPosition = xPositions[Math.floor(Math.random() * xPositions.length)];
-            let yPosition = yPositions[Math.floor(Math.random() * yPositions.length)];
             this.x = xPosition;
             this.y = yPosition;
         }
@@ -128,38 +129,53 @@ class Gem {
 }
 
 
-// class Heart {
-//     constructor(x, y) {
-//         this.x = x;
-//         this.y = y;
-//         this.sprite = 'images/Heart.png';
-//     }
+// Heart object to increase lives left for player
+class Heart {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.sprite = 'images/Heart.png';
+    }
 
-//     render() {
+    render() {
+        ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    }
 
-//     }
-// }
+    update() {
 
-// Now instantiate your objects.
-// Place all enemy objects in an array called allEnemies
-// Place the player object in a variable called player
+        const xPositions = [400, 300, 200, 100],
+            yPositions = [245, 160, 75];
+            let xPosition = xPositions[Math.floor(Math.random() * xPositions.length)];
+            let yPosition = yPositions[Math.floor(Math.random() * yPositions.length)];
 
-const enemy1 = new Enemy(), enemy2 = new Enemy(), enemy3 = new Enemy(), enemy4 = new Enemy(),
-        enemy5 = new Enemy(), enemy6 = new Enemy(), enemy7 = new Enemy();
+        // TODO Add score functionality
+        // if (score > 100) {
+           if (player.x + 70 > this.x && player.x < this.x + 95 && player. y + 50 > this.y && player.y < this.y + 70){
+                player.livesLeft++;
+                lives.textContent = `${player.livesLeft}`;
+                this.x = xPosition;
+            this.y = yPosition;
+            }
+    }  // }
 
-const allEnemies = [enemy1, enemy2, enemy3, enemy4, enemy5, enemy6, enemy7];
-
-const player = new Player();
-
-let gem = new Gem(100, 230);
-
-function resetPlayer() {
-    player.y = 315;
-    player.x = 200;
 }
 
-// This listens for key presses and sends the keys to your
-// Player.handleInput() method. You don't need to modify this.
+
+// Instantiate objects.
+const allEnemies = [];
+for (let i = 0; i < 7; i++){
+    const enemy = new Enemy();
+    allEnemies.push(enemy);
+}
+
+const player = new Player();
+const gem = new Gem(300, 60);
+const heart = new Heart(100, 75);
+
+
+/** Event Listeners **/
+// Listen for key presses and send the keys to the
+// Player.handleInput() method.
 document.addEventListener('keyup', function(e) {
     var allowedKeys = {
         37: 'left',
@@ -174,13 +190,20 @@ document.addEventListener('keyup', function(e) {
     //TODO: change to a function call that handles input with a scoring system
     if(player.y < 0){
         setTimeout(resetPlayer, 1000);
+        let possibleYValues = [230, 145, 60];
+        // reset enemy positions after player reaches water
+        allEnemies.forEach((enemy) => {
+            enemy.y = possibleYValues[Math.floor(Math.random() * possibleYValues.length)];
+        });
     }
 });
 
+
+// Event handlers for touch inputs. Adapted from https://developer.mozilla.org/en-US/docs/Web/API/Touch/clientX
+// Clients are initially set to null and then reset to null
+// after event has been handled to avoid jeopardizing touch position calculations
 let clientX = null, clientY = null;
 
-//Event handlers for touch inputs. Adapted from https://developer.mozilla.org/en-US/docs/Web/API/Touch/clientX
-//clients are initially set to null and then reset to null after event has been handled to avoid jeopardizing touch position calculations
 document.addEventListener('touchstart', (e) => {
     clientX = e.touches[0].clientX;
     clientY = e.touches[0].clientY;
@@ -236,3 +259,37 @@ document.addEventListener('touchstart', (e) => {
 }, false);
 
 
+/**
+    Event listeners for player selection.
+    Each listner handles a click by changing the player object's image source attribute
+    based on it's position in the array that holds all character image sources
+**/
+// Event listener for next button
+nextBtn.addEventListener('click', () => {
+    index > 3 ? index = 0 : index++;
+    character.setAttribute('src', characters[index]);
+});
+
+// Event listener for previous button
+prevBtn.addEventListener('click', () => {
+    index > 4 ? index = 0
+    : index <= 0 ? index = 4
+    : index--;
+
+    character.setAttribute('src', characters[index]);
+});
+
+// Event listener for select button
+selectBtn.addEventListener('click', () => {
+    choiceModal.setAttribute('style', 'display: none');
+    player.sprite = characters[index];
+});
+
+
+/** Function Declarations **/
+
+// Set player back to initial position
+function resetPlayer() {
+    player.y = 315;
+    player.x = 200;
+}

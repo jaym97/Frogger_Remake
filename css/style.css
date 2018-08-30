@@ -51,6 +51,11 @@ body {
 	border: 0.5px solid transparent;
 }
 
+.lives {
+	font-size: 1.5em;
+	color: #f00;
+}
+
 @media screen and (max-width: 510px) {
 	.player-choice_modal {
 		height: 130vh;

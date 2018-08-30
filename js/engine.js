@@ -96,6 +96,7 @@ var Engine = (function(global) {
         });
         player.update();
         gem.update();
+        heart.update();
     }
 
     /* This function initially draws the "game level", it will then call
@@ -150,7 +151,7 @@ var Engine = (function(global) {
     function renderEntities() {
         /* Check if player has been selected then
          * loop through all of the objects within the allEnemies array and call
-         * the render function you have defined.
+         * the render function.
          */
 
         if (doc.querySelector('.player-choice_modal').style.display === 'none'){
@@ -160,6 +161,7 @@ var Engine = (function(global) {
 
         	player.render();
         	gem.render();
+        	heart.render();
         }
 
     }
@@ -188,7 +190,8 @@ var Engine = (function(global) {
         'images/char-princess-girl.png',
         'images/Gem Green.png',
         'images/Gem Blue.png',
-        'images/Gem Orange.png'
+        'images/Gem Orange.png',
+        'images/Heart.png'
     ]);
     Resources.onReady(init);
 

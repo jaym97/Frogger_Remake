@@ -7,7 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-
+	<section class="score-panel">
+		<p class="timer-display">Time Left: 00:00</p>
+		<p class="score">Score: 000</p>
+		<p class="lives">&hearts; <span id="lives-text">5</span></p>
+	</section>
 	<section class="player-choice_modal">
 		<section class="player-choice_dialogue">
 			<section class="dialogue-header">
@@ -18,9 +22,9 @@
 				<img src="images/char-boy.png" id="player-sprite" alt="Game character">
 
 				<section class="controls">
-					<button class="btn" id="previous" aria-label="previous button">previous</button>
-					<button class="btn" id="select" aria-label="select button">select</button>
-					<button class="btn" id="next" aria-label="next button">next</button>
+					<button class="btn" id="previous" label="previous button">previous</button>
+					<button class="btn" id="select" label="select button">select</button>
+					<button class="btn" id="next" label="next button">next</button>
 				</section>
 			</section>
 		</section>
