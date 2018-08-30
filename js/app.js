@@ -98,7 +98,7 @@ class Gem {
     constructor(x, y) {
         this.x = x;
         this.y = y;
-        this.sprite = 'images/Gem blue.png';
+        this.sprite = 'images/Gem Blue.png';
     }
 
     render() {
@@ -107,9 +107,9 @@ class Gem {
 
     update() {
         const gemsArray = [
-              'images/Gem blue.png',
-              'images/Gem green.png',
-              'images/Gem orange.png'
+              'images/Gem Blue.png',
+              'images/Gem Green.png',
+              'images/Gem Orange.png'
             ],
             // Store possible coordinates for the gem
             xPositions = [400, 300, 200, 100],
@@ -132,7 +132,7 @@ class Gem {
 //     constructor(x, y) {
 //         this.x = x;
 //         this.y = y;
-//         this.sprite = 'images/Gem blue.png';
+//         this.sprite = 'images/Heart.png';
 //     }
 
 //     render() {
