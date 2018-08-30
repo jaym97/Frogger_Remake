@@ -7,18 +7,19 @@ var Enemy = function() {
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
     this.x = 0;
-    this.y;
-    this.speed = 50;
+    const possibleYValues = [60, 145, 230];
+    this.y = possibleYValues[Math.floor(Math.random() * possibleYValues.length)];
+    this.speed = Math.floor(Math.random() * (210 - 60 + 1)) + 60;
 };
 
 // Update the enemy's position. Reset position if enemy has reached end of canvas
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
-    this.x > 505 ? this.x = 0 : this.x += this.speed * dt;
+    this.x > 505 ? this.x = Math.random() * -890 : this.x += this.speed * dt;
 
     // Detect collision between enemy and player
     // Adapted from https://developer.mozilla.org/en-US/docs/Games/Tutorials/2D_Breakout_game_pure_JavaScript/Collision_detection
-    if (player.x + 70 > this.x && player.x < this.x + 75 && player. y + 50 > this.y && player.y < this.y + 50){
+    if (player.x + 70 > this.x && player.x < this.x + 85 && player. y + 50 > this.y && player.y < this.y + 50){
         resetPlayer();
     }
 };
@@ -68,8 +69,6 @@ class Player {
         this.y = 315;
         this.x = 200;
         this.sprite;
-        const canvas = document.getElementById('canvas');
-
     }
 
     update(dt) {
@@ -94,22 +93,65 @@ class Player {
     }
 }
 
+
+class Gem {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.sprite = 'images/Gem blue.png';
+    }
+
+    render() {
+        ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    }
+
+    update() {
+        const gemsArray = [
+              'images/Gem blue.png',
+              'images/Gem green.png',
+              'images/Gem orange.png'
+            ],
+            // Store possible coordinates for the gem
+            xPositions = [400, 300, 200, 100],
+            yPositions = [230, 145, 60];
+
+        // Check if player has 'picked up' a gem and respawn a random gem
+        // Check detection adapted from player-enemy collision with a few tweaks to account for the size of the gem
+        if (player.x + 70 > this.x && player.x < this.x + 95 && player. y + 50 > this.y && player.y < this.y + 70){
+            this.sprite = gemsArray[Math.floor(Math.random() * gemsArray.length)];
+            let xPosition = xPositions[Math.floor(Math.random() * xPositions.length)];
+            let yPosition = yPositions[Math.floor(Math.random() * yPositions.length)];
+            this.x = xPosition;
+            this.y = yPosition;
+        }
+    }
+}
+
+
+// class Heart {
+//     constructor(x, y) {
+//         this.x = x;
+//         this.y = y;
+//         this.sprite = 'images/Gem blue.png';
+//     }
+
+//     render() {
+
+//     }
+// }
+
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 
-const enemy1 = new Enemy(), enemy2 = new Enemy(), enemy3 = new Enemy(), enemy4 = new Enemy(), enemy5 = new Enemy(), enemy6 = new Enemy(),
-                enemy7 = new Enemy(), enemy8 = new Enemy();
+const enemy1 = new Enemy(), enemy2 = new Enemy(), enemy3 = new Enemy(), enemy4 = new Enemy(),
+        enemy5 = new Enemy(), enemy6 = new Enemy(), enemy7 = new Enemy();
 
-enemy1.y = 60, enemy2.y = 60;
-enemy3.y = 145, enemy4.y = 145, enemy8.y = 145;
-enemy5.y = 230, enemy6.y = 230, enemy7.y = 230;
-enemy1.speed = 45;
-enemy2.speed = 200;
-
-const allEnemies = [enemy1, enemy2, enemy3, enemy4, enemy5, enemy6, enemy7, enemy8];
+const allEnemies = [enemy1, enemy2, enemy3, enemy4, enemy5, enemy6, enemy7];
 
 const player = new Player();
+
+let gem = new Gem(100, 230);
 
 function resetPlayer() {
     player.y = 315;
@@ -140,7 +182,6 @@ let clientX = null, clientY = null;
 //Event handlers for touch inputs. Adapted from https://developer.mozilla.org/en-US/docs/Web/API/Touch/clientX
 //clients are initially set to null and then reset to null after event has been handled to avoid jeopardizing touch position calculations
 document.addEventListener('touchstart', (e) => {
-    console.log(canvas);
     clientX = e.touches[0].clientX;
     clientY = e.touches[0].clientY;
 
