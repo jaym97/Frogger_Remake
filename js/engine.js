@@ -149,12 +149,13 @@ var Engine = (function(global) {
      * on your enemy and player entities within app.js
      */
     function renderEntities() {
-        /* Check if player has been selected then
+        /* Check if player has been selected and game is not over then
          * loop through all of the objects within the allEnemies array and call
          * the render function.
          */
 
-        if (doc.querySelector('#player-choice_modal').style.display === 'none'){
+        if (doc.getElementById('player-choice_modal').style.display === 'none'
+        	&& doc.getElementById('game-over_modal').style.display === 'none'){
         	allEnemies.forEach(function(enemy) {
             	enemy.render();
         	});
