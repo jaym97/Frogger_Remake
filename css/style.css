@@ -7,6 +7,11 @@ body {
     background-image: url(../images/geometry2.png);
 }
 
+#instructions-modal {
+	position: absolute;
+	z-index: 5;
+}
+
 .score-panel {
 	position: absolute;
 	display: flex;
@@ -28,6 +33,21 @@ body {
 
 #player-choice_modal {
 	z-index: 4;
+	display: none;
+}
+
+.content-wrapper {
+	width: 350px;
+	height: 350px;
+	margin: 15% auto;
+	background-color: #fff;
+	border-radius: 5px;
+	display: flex;
+	display: -webkit-flex;
+	display: -moz-flexbox;
+	display: -ms-flexbox;
+	flex-direction: column;
+	justify-content: space-around;
 }
 
 .player-choice_dialogue {
@@ -75,6 +95,11 @@ body {
 #game-over_modal {
 	position: absolute;
 	z-index: 3;
+	display: none;
+}
+
+#timed-mode_transition {
+	z-index: 0;
 	display: none;
 }
 

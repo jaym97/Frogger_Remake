@@ -155,14 +155,16 @@ var Engine = (function(global) {
          */
 
         if (doc.getElementById('player-choice_modal').style.display === 'none'
-        	&& doc.getElementById('game-over_modal').style.display === 'none'){
+        	&& doc.getElementById('game-over_modal').style.display === 'none'
+        	/*&& doc.getElementById('instructions-modal').style.display === 'none'*/
+        	/*&& doc.getElementById('timed-mode_transition').style.display === 'none'*/){
         	allEnemies.forEach(function(enemy) {
             	enemy.render();
         	});
 
         	player.render();
-        	gem.render();
-        	heart.render();
+			gem.render();
+			heart.render();
         }
 
     }

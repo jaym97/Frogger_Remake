@@ -8,10 +8,41 @@
 </head>
 <body>
 	<section class="score-panel">
-		<p class="timer-display">Time Left: 2:00</p>
+		<p class="timer-display">Time Left: 0:00</p>
 		<p class="score">Score: 0</p>
 		<p class="lives">&hearts; <span id="lives-text">5</span></p>
 		<!-- <button class="btn" id="change-mode" name="Change-mode button">timed mode</button> -->
+	</section>
+
+	<section class="modal-background" id="instructions-modal">
+		<section class="content-wrapper">
+			<section>
+				<h1>How To Play</h1>
+			</section>
+
+			<section>
+				<p>This is a remake of the classic arcade game, Frogger. Your aim is to get to the water(blue tiles) without
+				running into the bugs. Pick up hearts to increase lives left
+			and gems to boost score. To move the player around, use the arrow keys on PC and Mac or swipe up, down, left, or right on touch screen devices. Click continue to start or the timed mode button if you're up for a challenge.</p>
+			</section>
+
+			<section class="controls">
+				<button class="btn" id="continue-button" name="Continue button">continue</button>
+				<button class="btn" id="timed-mode_button" name="Timed-mode button">timed mode</button>
+			</section>
+		</section>
+	</section>
+
+	<section class="modal-background" id="timed-mode_transition">
+		<section class="player-choice_dialogue">
+			<section>
+				<h2>*Challenge Accepted*</h2>
+			</section>
+
+			<section>
+				<p>You have 2 minutes to score as much as possible. Good luck!</p>
+			</section>
+		</section>
 	</section>
 
 	<section class="modal-background" id="game-over_modal">
@@ -31,6 +62,7 @@
 			</section>
 		</section>
 	</section>
+
 	<section class="modal-background" id="player-choice_modal">
 		<section class="player-choice_dialogue">
 			<section class="dialogue-header">

@@ -9,11 +9,16 @@ const characters = ['images/char-boy.png',
     prevBtn = document.getElementById('previous'),
     selectBtn = document.getElementById('select'),
     choiceModal = document.getElementById('player-choice_modal'),
+    gameOverModal = document.getElementById('game-over_modal'),
+    instructionsModal = document.getElementById('instructions-modal'),
+    transitionModal = document.getElementById('timed-mode_transition'),
     lives = document.getElementById('lives-text'),
     scoreDisplay = document.querySelector('.score'),
-    gameOverModal = document.getElementById('game-over_modal'),
     retryButton = document.getElementById('retry-btn'),
-    closeButton = document.getElementById('close-btn');
+    closeButton = document.getElementById('close-btn'),
+    continueButton = document.getElementById('continue-button'),
+    timedModeBtn = document.getElementById('timed-mode_button');
+
 
 let index = 0;
 
@@ -26,7 +31,7 @@ class Enemy {
         // a helper we've provided to easily load images
         this.sprite = 'images/enemy-bug.png';
         this.x = 0;
-        const possibleYValues = [60, 145, 230];
+        const possibleYValues = [145, 230, 60];
         this.y = possibleYValues[Math.floor(Math.random() * possibleYValues.length)];
         this.speed = Math.floor(Math.random() * (270 - 65 + 1)) + 65;
     };
@@ -62,7 +67,7 @@ class Player {
         // Detect collision between enemy and player
         // Adapted from https://developer.mozilla.org/en-US/docs/Games/Tutorials/2D_Breakout_game_pure_JavaScript/Collision_detection
         allEnemies.forEach(enemy => {
-            if (this.x + 70 > enemy.x && this.x < enemy.x + 85 && this. y + 50 > enemy.y && this.y < enemy.y + 50){
+            if (this.x + 55 > enemy.x && this.x < enemy.x + 55 && this. y + 50 > enemy.y && this.y < enemy.y + 50){
                 this.score -= 5;
                 if (this.score <= 0){
                     this.score = 0;
@@ -303,12 +308,28 @@ selectBtn.addEventListener('click', () => {
     gameOverModal.setAttribute('style', 'display: none');
 });
 
+/* ***************************** */
 // Event listener for retry button
 retryButton.addEventListener('click',() => {
     choiceModal.setAttribute('style', 'display: block');
     // Simple game reset
     player.livesLeft = 5;
     player.score = 0;
+});
+
+// Event listener for continue button
+continueButton.addEventListener('click', () => {
+    instructionsModal.setAttribute('style', 'display: none');
+    choiceModal.setAttribute('style', 'display: block');
+});
+
+// Event listener for timed mode button
+timedModeBtn.addEventListener('click', () => {
+    instructionsModal.setAttribute('style', 'display: none');
+    transitionModal.setAttribute('style', 'display: block');
+
+    setTimeout(() => transitionModal.setAttribute('style', 'display: none'), 2000);
+    setTimeout(() => choiceModal.setAttribute('style', 'display: block'), 2200);
 });
 
 
@@ -325,7 +346,7 @@ function resetPlayer() {
 * @param {number} num
 */
 function updateEnemySpeed(num) {
-    allEnemies.forEach(enemy =>{
+    allEnemies.forEach(enemy => {
         num >= 320 ? enemy.speed = Math.floor(Math.random() * (620 - 300 + 1)) + 300
         : num >= 260 && num < 320 ? enemy.speed = Math.floor(Math.random() * (550 - 260 + 1)) + 260
         : num >= 200 && num < 260 ? enemy.speed = Math.floor(Math.random() * (480 - 220 + 1)) + 220
