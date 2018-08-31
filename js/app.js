@@ -9,7 +9,8 @@ const characters = ['images/char-boy.png',
     prevBtn = document.getElementById('previous'),
     selectBtn = document.getElementById('select'),
     choiceModal = document.querySelector('.player-choice_modal'),
-    lives = document.querySelector('#lives-text');
+    lives = document.querySelector('#lives-text'),
+    scoreDisplay = document.querySelector('.score');
 
 let index = 0;
 
@@ -24,17 +25,16 @@ class Enemy {
         this.x = 0;
         const possibleYValues = [60, 145, 230];
         this.y = possibleYValues[Math.floor(Math.random() * possibleYValues.length)];
-        this.speed = Math.floor(Math.random() * (210 - 60 + 1)) + 60;
+        this.speed = Math.floor(Math.random() * (270 - 65 + 1)) + 65;
     };
 
     // Update the enemy's position. Reset position if enemy has reached end of canvas
     // Parameter: dt, a time delta between ticks
     update(dt) {
-        lives.textContent = `${this.livesLeft}`;
         this.x > 505 ? this.x = Math.random() * -890 : this.x += this.speed * dt;
     }
 
-    // Draw the enemy on the screen, required method for game
+    // Draw the enemy on the screen
     render() {
         ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
     }
@@ -48,15 +48,21 @@ class Player {
         this.x = 200;
         this.sprite;
         this.livesLeft = 5;
+        this.score = 0;
     }
 
     update(dt) {
         lives.textContent = `${this.livesLeft}`;
+        scoreDisplay.textContent = `${this.score}`;
 
         // Detect collision between enemy and player
         // Adapted from https://developer.mozilla.org/en-US/docs/Games/Tutorials/2D_Breakout_game_pure_JavaScript/Collision_detection
         allEnemies.forEach(enemy => {
             if (this.x + 70 > enemy.x && this.x < enemy.x + 85 && this. y + 50 > enemy.y && this.y < enemy.y + 50){
+                this.score -= 5;
+                if (this.score <= 0){
+                    this.score = 0;
+                }
                 resetPlayer();
                 if(this.livesLeft === 0){
                     this.livesLeft = 0;
@@ -99,6 +105,10 @@ class Gem {
         this.x = x;
         this.y = y;
         this.sprite = 'images/Gem Blue.png';
+
+        // Store possible coordinates for the gem
+        this.xPositions = [400, 300, 200, 100];
+        this.yPositions = [230, 145, 60];
     }
 
     render() {
@@ -110,20 +120,22 @@ class Gem {
               'images/Gem Blue.png',
               'images/Gem Green.png',
               'images/Gem Orange.png'
-            ],
-            // Store possible coordinates for the gem
-            xPositions = [400, 300, 200, 100],
-            yPositions = [230, 145, 60];
-
-            let xPosition = xPositions[Math.floor(Math.random() * xPositions.length)];
-            let yPosition = yPositions[Math.floor(Math.random() * yPositions.length)];
+            ];
 
         // Check if player has 'picked up' a gem and respawn a random gem
-        // Check detection adapted from player-enemy collision with a few tweaks to account for the size of the gem
+        // Detection adapted from player-enemy collision with a few tweaks to account for the size of the gem
         if (player.x + 70 > this.x && player.x < this.x + 95 && player. y + 50 > this.y && player.y < this.y + 70){
             this.sprite = gemsArray[Math.floor(Math.random() * gemsArray.length)];
-            this.x = xPosition;
-            this.y = yPosition;
+            player.score += 15;
+
+            // Push the gem off screen
+            this.x = -800;
+            this.y = -800;
+            // Pull it back after timeout has elapsed to a random spot
+            setTimeout(() => {
+                this.x = this.xPositions[Math.floor(Math.random() * this.xPositions.length)];
+                this.y = this.yPositions[Math.floor(Math.random() * this.yPositions.length)];
+            }, 7000);
         }
     }
 }
@@ -135,6 +147,8 @@ class Heart {
         this.x = x;
         this.y = y;
         this.sprite = 'images/Heart.png';
+        this.xPositions = [400, 300, 200, 100];
+        this.yPositions = [245, 160, 75];
     }
 
     render() {
@@ -142,21 +156,18 @@ class Heart {
     }
 
     update() {
+       if (player.x + 70 > this.x && player.x < this.x + 95 && player. y + 50 > this.y && player.y < this.y + 70){
+            player.livesLeft >= 5 ? player.livesLeft = 6 : player.livesLeft++;
+            lives.textContent = `${player.livesLeft}`;
+            this.x = -300;
+            this.y = -200;
 
-        const xPositions = [400, 300, 200, 100],
-            yPositions = [245, 160, 75];
-            let xPosition = xPositions[Math.floor(Math.random() * xPositions.length)];
-            let yPosition = yPositions[Math.floor(Math.random() * yPositions.length)];
-
-        // TODO Add score functionality
-        // if (score > 100) {
-           if (player.x + 70 > this.x && player.x < this.x + 95 && player. y + 50 > this.y && player.y < this.y + 70){
-                player.livesLeft++;
-                lives.textContent = `${player.livesLeft}`;
-                this.x = xPosition;
-            this.y = yPosition;
-            }
-    }  // }
+            setTimeout(() => {
+                this.x = this.xPositions[Math.floor(Math.random() * this.xPositions.length)];
+                this.y = this.yPositions[Math.floor(Math.random() * this.yPositions.length)];
+            }, 15000);
+        }
+    }
 
 }
 
@@ -189,6 +200,7 @@ document.addEventListener('keyup', function(e) {
     //Check if player has reached water then send it back to the fields.
     //TODO: change to a function call that handles input with a scoring system
     if(player.y < 0){
+        player.score += 10;
         setTimeout(resetPlayer, 1000);
         let possibleYValues = [230, 145, 60];
         // reset enemy positions after player reaches water
@@ -249,6 +261,7 @@ document.addEventListener('touchstart', (e) => {
 
         //TODO Replace with a reset function
         if (player.y < 0){
+            player.score += 10;
             setTimeout(resetPlayer, 1000);
         }
 
