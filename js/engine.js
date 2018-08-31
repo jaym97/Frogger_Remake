@@ -154,7 +154,7 @@ var Engine = (function(global) {
          * the render function.
          */
 
-        if (doc.querySelector('.player-choice_modal').style.display === 'none'){
+        if (doc.querySelector('#player-choice_modal').style.display === 'none'){
         	allEnemies.forEach(function(enemy) {
             	enemy.render();
         	});

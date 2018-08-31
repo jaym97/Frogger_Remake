@@ -8,9 +8,12 @@ const characters = ['images/char-boy.png',
     nextBtn = document.getElementById('next'),
     prevBtn = document.getElementById('previous'),
     selectBtn = document.getElementById('select'),
-    choiceModal = document.querySelector('.player-choice_modal'),
-    lives = document.querySelector('#lives-text'),
-    scoreDisplay = document.querySelector('.score');
+    choiceModal = document.getElementById('player-choice_modal'),
+    lives = document.getElementById('lives-text'),
+    scoreDisplay = document.querySelector('.score'),
+    gameOverModal = document.getElementById('game-over_modal'),
+    retryButton = document.getElementById('retry-btn'),
+    closeButton = document.getElementById('close-btn');
 
 let index = 0;
 
@@ -74,7 +77,7 @@ class Player {
                     if (this.livesLeft === 0){
                         this.livesLeft = 5;
                         resetPlayer();
-                        console.log('Display game over modal');
+                        endGame();
                     }
                 }
             }
@@ -166,7 +169,7 @@ class Heart {
             setTimeout(() => {
                 this.x = this.xPositions[Math.floor(Math.random() * this.xPositions.length)];
                 this.y = this.yPositions[Math.floor(Math.random() * this.yPositions.length)];
-            }, 15000);
+            }, 18700);
         }
     }
 
@@ -297,6 +300,15 @@ prevBtn.addEventListener('click', () => {
 selectBtn.addEventListener('click', () => {
     choiceModal.setAttribute('style', 'display: none');
     player.sprite = characters[index];
+    gameOverModal.setAttribute('style', 'display: none');
+});
+
+// Event listener for retry button
+retryButton.addEventListener('click',() => {
+    choiceModal.setAttribute('style', 'display: block');
+    // Simple game reset
+    player.livesLeft = 5;
+    player.score = 0;
 });
 
 
@@ -315,10 +327,16 @@ function resetPlayer() {
 function updateEnemySpeed(num) {
     allEnemies.forEach(enemy =>{
         num >= 320 ? enemy.speed = Math.floor(Math.random() * (620 - 300 + 1)) + 300
-        : num >= 260 && num < 320 ? enemy.speed = Math.floor(Math.random() * (520 - 250 + 1)) + 250
-        : num >= 200 && num < 260 ? enemy.speed = Math.floor(Math.random() * (460 - 200 + 1)) + 200
+        : num >= 260 && num < 320 ? enemy.speed = Math.floor(Math.random() * (550 - 260 + 1)) + 260
+        : num >= 200 && num < 260 ? enemy.speed = Math.floor(Math.random() * (480 - 220 + 1)) + 220
         : num >= 150 && num < 200 ? enemy.speed = Math.floor(Math.random() * (400 - 160 + 1)) + 160
         :   num >= 100 && num < 150 ? enemy.speed = Math.floor(Math.random() * (350 - 120 + 1)) + 120
         :  enemy.speed = Math.floor(Math.random() * (270 - 65 + 1)) + 65;
     });
+}
+
+function endGame() {
+    const finalScoreDisplay = document.getElementById('final-score');
+    finalScoreDisplay.textContent = player.score;
+    gameOverModal.setAttribute('style', 'display: block');
 }

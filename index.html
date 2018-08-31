@@ -12,7 +12,25 @@
 		<p class="score">Score: 0</p>
 		<p class="lives">&hearts; <span id="lives-text">5</span></p>
 	</section>
-	<section class="player-choice_modal">
+
+	<section class="modal-background" id="game-over_modal">
+		<section class="player-choice_dialogue">
+			<section>
+				<!-- TODO: Add functionality to update span -->
+				<h2>Woops! You've run out of <span id="reason">lives</span></h2>
+			</section>
+
+			<section>
+				Score: <span id="final-score"></span>
+			</section>
+
+			<section class="controls">
+				<button class="btn" id="retry-btn">try again</button>
+				<button class="btn" id="close-btn">close</button>
+			</section>
+		</section>
+	</section>
+	<section class="modal-background" id="player-choice_modal">
 		<section class="player-choice_dialogue">
 			<section class="dialogue-header">
 				<h1 class="pick-player-text">Pick a Character</h1>
@@ -32,5 +50,6 @@
     <script src="js/resources.js"></script>
     <script src="js/app.js"></script>
     <script src="js/engine.js"></script>
+    <!-- TODO: Add game sounds and background music -->
 </body>
 </html>
