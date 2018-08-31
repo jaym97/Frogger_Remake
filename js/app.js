@@ -54,7 +54,7 @@ class Player {
     update(dt) {
         lives.textContent = `${this.livesLeft}`;
         scoreDisplay.textContent = `Score: ${this.score}`;
-        increaseEnemySpeed(this.score);
+        updateEnemySpeed(this.score);
 
         // Detect collision between enemy and player
         // Adapted from https://developer.mozilla.org/en-US/docs/Games/Tutorials/2D_Breakout_game_pure_JavaScript/Collision_detection
@@ -312,9 +312,11 @@ function resetPlayer() {
 * @description Increases speed of all enemy instances based on the score of the game
 * @param {number} num
 */
-function increaseEnemySpeed(num) {
+function updateEnemySpeed(num) {
     allEnemies.forEach(enemy =>{
-        num >= 200 ? enemy.speed = Math.floor(Math.random() * (460 - 200 + 1)) + 200
+        num >= 320 ? enemy.speed = Math.floor(Math.random() * (620 - 300 + 1)) + 300
+        : num >= 260 && num < 320 ? enemy.speed = Math.floor(Math.random() * (520 - 250 + 1)) + 250
+        : num >= 200 && num < 260 ? enemy.speed = Math.floor(Math.random() * (460 - 200 + 1)) + 200
         : num >= 150 && num < 200 ? enemy.speed = Math.floor(Math.random() * (400 - 160 + 1)) + 160
         :   num >= 100 && num < 150 ? enemy.speed = Math.floor(Math.random() * (350 - 120 + 1)) + 120
         :  enemy.speed = Math.floor(Math.random() * (270 - 65 + 1)) + 65;
