@@ -18,6 +18,7 @@ const characters = ['images/char-boy.png',
     closeButton = document.getElementById('close-btn'),
     continueButton = document.getElementById('continue-button'),
     timedModeBtn = document.getElementById('timed-mode_button'),
+    changeModeButton = document.getElementById('change-mode'),
     timeDisplay = document.querySelector('.timer-display'),
     gameEndReason = document.getElementById('reason');
 
@@ -221,7 +222,7 @@ document.addEventListener('keyup', function(e) {
         setTimeout(resetPlayer, 200);
         // reset enemy positions after player reaches water
         allEnemies.forEach((enemy) => {
-            enemy.y = possibleYValues[Math.floor(Math.random() * possibleYValues.length)];
+            enemy.y = enemy.possibleYValues[Math.floor(Math.random() * enemy.possibleYValues.length)];
             enemy.x = Math.floor(Math.random() * (0 - 500) + 1) + 0;
         });
     }
@@ -356,6 +357,12 @@ timedModeBtn.addEventListener('click', () => {
     setTimeout(() => transitionModal.setAttribute('style', 'display: none'), 2000);
     setTimeout(() => choiceModal.setAttribute('style', 'display: block'), 2200);
 
+});
+
+changeModeButton.addEventListener('click', () => {
+    timeDisplay.style.display === 'none' ? timeDisplay.setAttribute('style', 'display: block')
+    :   timeDisplay.setAttribute('style', 'display: none');
+    choiceModal.setAttribute('style', 'display: block');
 });
 
 
