@@ -282,7 +282,7 @@ document.addEventListener('touchstart', (e) => {
             setTimeout(resetPlayer, 200);
             // reset enemy positions after player reaches water
             allEnemies.forEach((enemy) => {
-                enemy.y = possibleYValues[Math.floor(Math.random() * possibleYValues.length)];
+                enemy.y = enemy.possibleYValues[Math.floor(Math.random() * enemy.possibleYValues.length)];
                 enemy.x = Math.floor(Math.random() * (0 - 500) + 1) + 0;
             });
         }
