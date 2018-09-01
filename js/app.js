@@ -87,7 +87,6 @@ class Player {
 
                     if (this.livesLeft === 0){
                         this.livesLeft = 5;
-                        clearInterval(timerID);
                         resetPlayer();
                         gameEndReason.textContent = 'lives';
                         endGame();
@@ -360,6 +359,8 @@ timedModeBtn.addEventListener('click', () => {
 });
 
 changeModeButton.addEventListener('click', () => {
+    clearInterval(timerID);
+    player.score = 0;
     timeDisplay.style.display === 'none' ? timeDisplay.setAttribute('style', 'display: block')
     :   timeDisplay.setAttribute('style', 'display: none');
     choiceModal.setAttribute('style', 'display: block');
@@ -390,6 +391,7 @@ function updateEnemySpeed(num) {
 }
 
 function endGame() {
+    clearInterval(timerID);
     const finalScoreDisplay = document.getElementById('final-score');
     finalScoreDisplay.textContent = player.score;
     gameOverModal.setAttribute('style', 'display: block');
