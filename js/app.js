@@ -17,10 +17,13 @@ const characters = ['images/char-boy.png',
     retryButton = document.getElementById('retry-btn'),
     closeButton = document.getElementById('close-btn'),
     continueButton = document.getElementById('continue-button'),
-    timedModeBtn = document.getElementById('timed-mode_button');
+    timedModeBtn = document.getElementById('timed-mode_button'),
+    timeDisplay = document.querySelector('.timer-display'),
+    gameEndReason = document.getElementById('reason');
 
 
 let index = 0;
+let timerID;
 
 /** Objects **/
 
@@ -31,8 +34,8 @@ class Enemy {
         // a helper we've provided to easily load images
         this.sprite = 'images/enemy-bug.png';
         this.x = 0;
-        const possibleYValues = [145, 230, 60];
-        this.y = possibleYValues[Math.floor(Math.random() * possibleYValues.length)];
+        this.possibleYValues = [145, 230, 60];
+        this.y = this.possibleYValues[Math.floor(Math.random() * this.possibleYValues.length)];
         this.speed = Math.floor(Math.random() * (270 - 65 + 1)) + 65;
     };
 
@@ -72,7 +75,9 @@ class Player {
                 if (this.score <= 0){
                     this.score = 0;
                 }
+
                 resetPlayer();
+
                 if(this.livesLeft === 0){
                     this.livesLeft = 0;
                 }
@@ -81,7 +86,9 @@ class Player {
 
                     if (this.livesLeft === 0){
                         this.livesLeft = 5;
+                        clearInterval(timerID);
                         resetPlayer();
+                        gameEndReason.textContent = 'lives';
                         endGame();
                     }
                 }
@@ -137,14 +144,14 @@ class Gem {
             this.sprite = gemsArray[Math.floor(Math.random() * gemsArray.length)];
             player.score += 15;
 
-            // Push the gem off screen
+            // Place the gem off screen
             this.x = -800;
             this.y = -800;
-            // Pull it back after timeout has elapsed to a random spot
+            // Place it back on the canvas after timeout has elapsed to a random spot
             setTimeout(() => {
                 this.x = this.xPositions[Math.floor(Math.random() * this.xPositions.length)];
                 this.y = this.yPositions[Math.floor(Math.random() * this.yPositions.length)];
-            }, 7000);
+            }, 10000);
         }
     }
 }
@@ -168,13 +175,15 @@ class Heart {
        if (player.x + 70 > this.x && player.x < this.x + 95 && player. y + 50 > this.y && player.y < this.y + 70){
             player.livesLeft >= 5 ? player.livesLeft = 6 : player.livesLeft++;
             lives.textContent = `${player.livesLeft}`;
+
+            // Place the heart off screen
             this.x = -300;
             this.y = -200;
-
+            // Place it back on a random spot on the canvas after timeout has elapsed
             setTimeout(() => {
                 this.x = this.xPositions[Math.floor(Math.random() * this.xPositions.length)];
                 this.y = this.yPositions[Math.floor(Math.random() * this.yPositions.length)];
-            }, 18700);
+            }, 20000);
         }
     }
 
@@ -207,14 +216,13 @@ document.addEventListener('keyup', function(e) {
     player.handleInput(allowedKeys[e.keyCode]);
 
     //Check if player has reached water then send it back to the fields.
-    //TODO: change to a function call that handles input with a scoring system
     if(player.y < 0){
         player.score += 10;
-        setTimeout(resetPlayer, 1000);
-        let possibleYValues = [230, 145, 60];
+        setTimeout(resetPlayer, 200);
         // reset enemy positions after player reaches water
         allEnemies.forEach((enemy) => {
             enemy.y = possibleYValues[Math.floor(Math.random() * possibleYValues.length)];
+            enemy.x = Math.floor(Math.random() * (0 - 500) + 1) + 0;
         });
     }
 });
@@ -271,7 +279,12 @@ document.addEventListener('touchstart', (e) => {
         //TODO Replace with a reset function
         if (player.y < 0){
             player.score += 10;
-            setTimeout(resetPlayer, 1000);
+            setTimeout(resetPlayer, 200);
+            // reset enemy positions after player reaches water
+            allEnemies.forEach((enemy) => {
+                enemy.y = possibleYValues[Math.floor(Math.random() * possibleYValues.length)];
+                enemy.x = Math.floor(Math.random() * (0 - 500) + 1) + 0;
+            });
         }
 
         clientX = null;
@@ -306,6 +319,9 @@ selectBtn.addEventListener('click', () => {
     choiceModal.setAttribute('style', 'display: none');
     player.sprite = characters[index];
     gameOverModal.setAttribute('style', 'display: none');
+    if (timeDisplay.style.display === 'block'){
+        countdown();
+    }
 });
 
 /* ***************************** */
@@ -315,6 +331,14 @@ retryButton.addEventListener('click',() => {
     // Simple game reset
     player.livesLeft = 5;
     player.score = 0;
+});
+
+// Event listener for close button
+closeButton.addEventListener('click', () => {
+    gameOverModal.setAttribute('style', 'display: none');
+    // allEnemies.forEach(enemy => {
+    //     enemy.speed = 0;
+    // });
 });
 
 // Event listener for continue button
@@ -327,9 +351,11 @@ continueButton.addEventListener('click', () => {
 timedModeBtn.addEventListener('click', () => {
     instructionsModal.setAttribute('style', 'display: none');
     transitionModal.setAttribute('style', 'display: block');
+    timeDisplay.setAttribute('style', 'display: block');
 
     setTimeout(() => transitionModal.setAttribute('style', 'display: none'), 2000);
     setTimeout(() => choiceModal.setAttribute('style', 'display: block'), 2200);
+
 });
 
 
@@ -352,7 +378,7 @@ function updateEnemySpeed(num) {
         : num >= 200 && num < 260 ? enemy.speed = Math.floor(Math.random() * (480 - 220 + 1)) + 220
         : num >= 150 && num < 200 ? enemy.speed = Math.floor(Math.random() * (400 - 160 + 1)) + 160
         :   num >= 100 && num < 150 ? enemy.speed = Math.floor(Math.random() * (350 - 120 + 1)) + 120
-        :  enemy.speed = Math.floor(Math.random() * (270 - 65 + 1)) + 65;
+        :  enemy.speed = Math.floor(Math.random() * (290 - 70 + 1)) + 70;
     });
 }
 
@@ -360,4 +386,27 @@ function endGame() {
     const finalScoreDisplay = document.getElementById('final-score');
     finalScoreDisplay.textContent = player.score;
     gameOverModal.setAttribute('style', 'display: block');
+}
+
+function countdown() {
+    const now = Date.now();
+
+    // Set time left to 2 minutes with the best accuracy possible
+    const then = now + 120 * 1000;
+    timeDisplay.textContent = `120 seconds`;
+
+    let timeLeft = 0;
+    timerID = setInterval(() => {
+        timeLeft = Math.round((then - Date.now()) / 1000);
+        if (timeLeft < 0){
+            clearInterval(timerID);
+            return;
+        }
+
+        timeDisplay.textContent = `${timeLeft} seconds`;
+        if(timeLeft === 0){
+            gameEndReason.textContent = 'time';
+            endGame();
+        }
+    }, 1000);
 }

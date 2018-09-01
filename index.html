@@ -11,19 +11,24 @@
 		<p class="timer-display">Time Left: 0:00</p>
 		<p class="score">Score: 0</p>
 		<p class="lives">&hearts; <span id="lives-text">5</span></p>
-		<!-- <button class="btn" id="change-mode" name="Change-mode button">timed mode</button> -->
+		<!-- <button class="btn" id="change-mode" name="Change-mode button">change mode</button> -->
+		<!-- TODO: Add change mode button -->
 	</section>
 
 	<section class="modal-background" id="instructions-modal">
 		<section class="content-wrapper">
 			<section>
-				<h1>How To Play</h1>
+				<h1 class="modal-title">How To Play</h1>
 			</section>
 
 			<section>
-				<p>This is a remake of the classic arcade game, Frogger. Your aim is to get to the water(blue tiles) without
-				running into the bugs. Pick up hearts to increase lives left
-			and gems to boost score. To move the player around, use the arrow keys on PC and Mac or swipe up, down, left, or right on touch screen devices. Click continue to start or the timed mode button if you're up for a challenge.</p>
+				<p>This is a remake of the classic arcade game, Frogger.
+				<ul>
+					<li>Your aim is to get to the water(blue tiles). Avoid the bugs!</li>
+					<li>Pick up hearts to increase lives left, and gems to boost score</li>
+					<li>Use arrow keys to move player around on laptops or swipe up, down, left or right on touch screen devices</li>
+				</ul>
+			Click continue to start or the timed mode button if you're up for a challenge.</p>
 			</section>
 
 			<section class="controls">
@@ -49,7 +54,7 @@
 		<section class="player-choice_dialogue">
 			<section>
 				<!-- TODO: Add functionality to update span -->
-				<h2>Woops! You've run out of <span id="reason">lives</span></h2>
+				<h2>Woops! You've run out of <span id="reason"></span></h2>
 			</section>
 
 			<section>
