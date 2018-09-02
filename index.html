@@ -8,7 +8,7 @@
 </head>
 <body>
 	<section class="score-panel">
-		<p class="timer-display">Time Left: 0:00</p>
+		<p class="timer-display">Time Left: 120 seconds</p>
 		<p class="score">Score: 0</p>
 		<p class="lives">&hearts; <span id="lives-text">5</span></p>
 		<button class="btn" id="change-mode" name="Change-mode button">change mode</button>
@@ -84,6 +84,15 @@
 			</section>
 		</section>
 	</section>
+
+	<!-- collision sound from http://soundbible.com/1274-Alien-Death-Ray.html -->
+	<section id="collision-sound"></section>
+
+	<!-- success sound from https://freesound.org/people/original_sound/sounds/366104/ -->
+	<section id="success-sound"></section>
+
+	<section id="bg-sound"></section>
+
     <script src="js/resources.js"></script>
     <script src="js/app.js"></script>
     <script src="js/engine.js"></script>

@@ -20,7 +20,8 @@ const characters = ['images/char-boy.png',
     timedModeBtn = document.getElementById('timed-mode_button'),
     changeModeButton = document.getElementById('change-mode'),
     timeDisplay = document.querySelector('.timer-display'),
-    gameEndReason = document.getElementById('reason');
+    gameEndReason = document.getElementById('reason'),
+    successSound = document.getElementById('success-sound');
 
 
 let index = 0;
@@ -71,7 +72,9 @@ class Player {
         // Detect collision between enemy and player
         // Adapted from https://developer.mozilla.org/en-US/docs/Games/Tutorials/2D_Breakout_game_pure_JavaScript/Collision_detection
         allEnemies.forEach(enemy => {
-            if (this.x + 55 > enemy.x && this.x < enemy.x + 55 && this. y + 50 > enemy.y && this.y < enemy.y + 50){
+            if (this.x + 65 > enemy.x && this.x < enemy.x + 65 && this. y + 50 > enemy.y && this.y < enemy.y + 50){
+                const collisionSound = document.getElementById('collision-sound');
+                collisionSound.innerHTML = '<audio autoplay><source src="sounds/collide.mp3"></audio>';
                 this.score -= 5;
                 if (this.score <= 0){
                     this.score = 0;
@@ -140,7 +143,7 @@ class Gem {
 
         // Check if player has 'picked up' a gem and respawn a random gem
         // Detection adapted from player-enemy collision with a few tweaks to account for the size of the gem
-        if (player.x + 70 > this.x && player.x < this.x + 95 && player. y + 50 > this.y && player.y < this.y + 70){
+        if (player.x + 70 > this.x && player.x < this.x + 70 && player. y + 50 > this.y && player.y < this.y + 70){
             this.sprite = gemsArray[Math.floor(Math.random() * gemsArray.length)];
             player.score += 15;
 
@@ -172,7 +175,7 @@ class Heart {
     }
 
     update() {
-       if (player.x + 70 > this.x && player.x < this.x + 95 && player. y + 50 > this.y && player.y < this.y + 70){
+       if (player.x + 70 > this.x && player.x < this.x + 70 && player. y + 50 > this.y && player.y < this.y + 70){
             player.livesLeft >= 5 ? player.livesLeft = 6 : player.livesLeft++;
             lives.textContent = `${player.livesLeft}`;
 
@@ -217,8 +220,9 @@ document.addEventListener('keyup', function(e) {
 
     //Check if player has reached water then send it back to the fields.
     if(player.y < 0){
+        successSound.innerHTML = '<audio autoplay><source src="sounds/success.wav"></audio>';
         player.score += 10;
-        setTimeout(resetPlayer, 200);
+        setTimeout(resetPlayer, 500);
         // reset enemy positions after player reaches water
         allEnemies.forEach((enemy) => {
             enemy.y = enemy.possibleYValues[Math.floor(Math.random() * enemy.possibleYValues.length)];
@@ -278,6 +282,7 @@ document.addEventListener('touchstart', (e) => {
 
         //TODO Replace with a reset function
         if (player.y < 0){
+            successSound.innerHTML = '<audio autoplay><source src="sounds/success.wav"></audio>';
             player.score += 10;
             setTimeout(resetPlayer, 200);
             // reset enemy positions after player reaches water
@@ -316,6 +321,8 @@ prevBtn.addEventListener('click', () => {
 
 // Event listener for select button
 selectBtn.addEventListener('click', () => {
+    const backgroundSound = document.getElementById('bg-sound');
+    backgroundSound.innerHTML = '<audio autoplay loop volume="0.4"><source src="sounds/bg-sound.mp3">'
     choiceModal.setAttribute('style', 'display: none');
     player.sprite = characters[index];
     gameOverModal.setAttribute('style', 'display: none');
@@ -361,6 +368,7 @@ timedModeBtn.addEventListener('click', () => {
 changeModeButton.addEventListener('click', () => {
     clearInterval(timerID);
     player.score = 0;
+    player.livesLeft = 5;
     timeDisplay.style.display === 'none' ? timeDisplay.setAttribute('style', 'display: block')
     :   timeDisplay.setAttribute('style', 'display: none');
     choiceModal.setAttribute('style', 'display: block');
