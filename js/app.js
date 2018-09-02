@@ -25,8 +25,7 @@ const characters = ['images/char-boy.png',
     backgroundSound = document.getElementById('bg-sound');
 
 
-let index = 0;
-let timerID;
+let index = 0, timerID, timeLeft = 0;
 
 /** Objects **/
 
@@ -122,14 +121,18 @@ class Player {
 
 // Gem object to increase score when collected
 class Gem {
-    constructor(x, y) {
-        this.x = x;
-        this.y = y;
+    constructor() {
+        this.x = -800;
+        this.y = -800;
         this.sprite = 'images/Gem Blue.png';
 
         // Store possible coordinates for the gem
         this.xPositions = [400, 300, 200, 100];
         this.yPositions = [230, 145, 60];
+        setTimeout(() => {
+            this.x = this.xPositions[Math.floor(Math.random() * this.xPositions.length)];
+            this.y = this.yPositions[Math.floor(Math.random() * this.yPositions.length)];
+        }, Math.random() * (15000 - 8000 + 1) + 8000);
     }
 
     render() {
@@ -156,7 +159,7 @@ class Gem {
             setTimeout(() => {
                 this.x = this.xPositions[Math.floor(Math.random() * this.xPositions.length)];
                 this.y = this.yPositions[Math.floor(Math.random() * this.yPositions.length)];
-            }, 10000);
+            }, Math.random() * (15000 - 8000 + 1) + 8000);
         }
     }
 }
@@ -164,12 +167,17 @@ class Gem {
 
 // Heart object to increase lives left for player
 class Heart {
-    constructor(x, y) {
-        this.x = x;
-        this.y = y;
+    constructor() {
+        this.x = -300;
+        this.y = -300;
         this.sprite = 'images/Heart.png';
         this.xPositions = [400, 300, 200, 100];
         this.yPositions = [245, 160, 75];
+
+        setTimeout(() => {
+            this.x = this.xPositions[Math.floor(Math.random() * this.xPositions.length)];
+            this.y = this.yPositions[Math.floor(Math.random() * this.yPositions.length)];
+        }, Math.random() * (40000 - 20000 + 1) + 20000);
     }
 
     render() {
@@ -188,10 +196,52 @@ class Heart {
             setTimeout(() => {
                 this.x = this.xPositions[Math.floor(Math.random() * this.xPositions.length)];
                 this.y = this.yPositions[Math.floor(Math.random() * this.yPositions.length)];
-            }, 20000);
+            }, Math.random() * (40000 - 20000 + 1) + 20000);
         }
     }
+}
 
+
+// Star object for ultimate combo boost
+class Star {
+    constructor() {
+        this.x = -400;
+        this.y = -300;
+        this.sprite = 'images/Star.png';
+        this.xPositions = [400, 300, 200, 100];
+        this.yPositions = [245, 160, 75];
+
+        setTimeout(() => {
+            this.x = this.xPositions[Math.floor(Math.random() * this.xPositions.length)];
+            this.y = this.yPositions[Math.floor(Math.random() * this.yPositions.length)];
+        }, Math.random() * (40000 - 30000 + 1) + 30000);
+    }
+
+    render() {
+        ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    }
+
+    update() {
+       if (player.x + 70 > this.x && player.x < this.x + 70 && player. y + 50 > this.y && player.y < this.y + 70){
+            player.score += 25;
+            player.livesLeft >= 5 ? player.livesLeft = 6 : player.livesLeft += 2;
+            lives.textContent = `${player.livesLeft}`;
+            if (timeDisplay.style.display === 'block'){
+                clearInterval(timerID);
+                timeLeft += 5;
+                countdown();
+            }
+
+            // Place the star off screen
+            this.x = -100;
+            this.y = -100;
+            // Place it back on a random spot on the canvas after timeout has elapsed
+            setTimeout(() => {
+                this.x = this.xPositions[Math.floor(Math.random() * this.xPositions.length)];
+                this.y = this.yPositions[Math.floor(Math.random() * this.yPositions.length)];
+            }, Math.random() * (90000 - 30000 + 1) + 30000);
+        }
+    }
 }
 
 
@@ -203,8 +253,9 @@ for (let i = 0; i < 7; i++){
 }
 
 const player = new Player();
-const gem = new Gem(300, 60);
-const heart = new Heart(100, 75);
+const gem = new Gem();
+const heart = new Heart();
+const star = new Star();
 
 
 /** Event Listeners **/
@@ -391,12 +442,13 @@ function resetPlayer() {
 */
 function updateEnemySpeed(num) {
     allEnemies.forEach(enemy => {
-        num >= 320 ? enemy.speed = Math.floor(Math.random() * (620 - 300 + 1)) + 300
+        num >= 420 ? enemy.speed = Math.floor(Math.random() * (700 - 500 + 1)) + 500
+        : num >= 320 && num < 420 ? enemy.speed = Math.floor(Math.random() * (620 - 300 + 1)) + 300
         : num >= 260 && num < 320 ? enemy.speed = Math.floor(Math.random() * (550 - 260 + 1)) + 260
         : num >= 200 && num < 260 ? enemy.speed = Math.floor(Math.random() * (480 - 220 + 1)) + 220
         : num >= 150 && num < 200 ? enemy.speed = Math.floor(Math.random() * (400 - 160 + 1)) + 160
         :   num >= 100 && num < 150 ? enemy.speed = Math.floor(Math.random() * (350 - 120 + 1)) + 120
-        :  enemy.speed = Math.floor(Math.random() * (290 - 70 + 1)) + 70;
+        :  enemy.speed = Math.floor(Math.random() * (290 - 90 + 1)) + 90;
     });
 }
 
@@ -411,10 +463,10 @@ function countdown() {
     const now = Date.now();
 
     // Set time left to 2 minutes with the best accuracy possible
-    const then = now + 120 * 1000;
-    timeDisplay.textContent = `120 seconds`;
+    let then;
+    timeLeft <= 0 ? then = now + 120 * 1000 : then = now + timeLeft * 1000;
+    timeDisplay.textContent = timeLeft;
 
-    let timeLeft = 0;
     timerID = setInterval(() => {
         timeLeft = Math.round((then - Date.now()) / 1000);
         if (timeLeft < 0){

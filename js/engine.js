@@ -102,6 +102,7 @@ var Engine = (function(global) {
 	        player.update();
 	        gem.update();
 	        heart.update();
+	        star.update();
     	}
     }
 
@@ -170,6 +171,7 @@ var Engine = (function(global) {
         	player.render();
 			gem.render();
 			heart.render();
+			star.render();
         }
 
     }
@@ -199,7 +201,8 @@ var Engine = (function(global) {
         'images/Gem Green.png',
         'images/Gem Blue.png',
         'images/Gem Orange.png',
-        'images/Heart.png'
+        'images/Heart.png',
+        'images/Star.png'
     ]);
     Resources.onReady(init);
 

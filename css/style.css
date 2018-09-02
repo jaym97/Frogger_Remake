@@ -21,7 +21,7 @@ body {
 }
 
 #canvas {
-	margin-top: 20px;
+	margin-top: 30px;
 	width: 505px;
 	height: 606px;
 	align-self: center;
@@ -74,7 +74,7 @@ body {
 
 .content-wrapper {
 	width: 350px;
-	height: 400px;
+	height: 450px;
 	margin: 12% auto;
 	background: linear-gradient(#b2fefa, #0ed2f7);
 	border-radius: 5px;
@@ -138,7 +138,7 @@ body {
 }
 
 .lives {
-	font-size: 1.2em;
+	font-size: 1.1em;
 	color: #f00;
 }
 
@@ -167,11 +167,6 @@ body {
 }
 
 @media screen and (max-width: 510px) {
-	/*.modal-background {
-		height: 120vh;
-		width: 130vw;
-	}*/
-
 	#canvas {
 		width: 500px;
 		height: 600px;
@@ -179,11 +174,6 @@ body {
 }
 
 @media screen and (max-width: 415px) {
-	/*.modal-background {
-		height: 140%;
-		width: 140vw;
-	}*/
-
 	#canvas {
 		width: 95%;
 		height: 468px;
@@ -191,11 +181,6 @@ body {
 }
 
 @media screen and (max-width: 370px) {
-	/*.modal-background {
-		height: 165vh;
-		width: 162vw;
-	}*/
-
 	#canvas {
 		width: 95%;
 		height: 432px;
