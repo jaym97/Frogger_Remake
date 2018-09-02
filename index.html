@@ -7,94 +7,96 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-	<section class="score-panel">
-		<p class="timer-display">Time Left: 120 seconds</p>
-		<p class="score">Score: 0</p>
-		<p class="lives">&hearts; <span id="lives-text">5</span></p>
-		<button class="btn" id="change-mode" name="Change-mode button">change mode</button>
-	</section>
-
-	<section class="modal-background" id="instructions-modal">
-		<section class="content-wrapper">
-			<section>
-				<h1 class="modal-title">How To Play</h1>
-			</section>
-
-			<section>
-				<p>This is a remake of the classic arcade game, Frogger.
-				<ul>
-					<li>Your aim is to get to the water(blue tiles). Avoid the bugs!</li>
-					<li>Pick up hearts to increase lives left, and gems to boost score</li>
-					<li>Use arrow keys to move player around on laptops or swipe up, down, left or right on touch screen devices</li>
-				</ul>
-			Click continue to start or the timed mode button if you're up for a challenge.</p>
-			</section>
-
-			<section class="controls">
-				<button class="btn" id="continue-button" name="Continue button">continue</button>
-				<button class="btn" id="timed-mode_button" name="Timed-mode button">timed mode</button>
-			</section>
+	<section id="page-container">
+		<section class="score-panel">
+			<p class="timer-display">Time Left: 120 seconds</p>
+			<p class="score">Score: 0</p>
+			<p class="lives">&hearts; <span id="lives-text">5</span></p>
+			<button class="btn" id="change-mode" name="Change-mode button">change mode</button>
 		</section>
-	</section>
 
-	<section class="modal-background" id="timed-mode_transition">
-		<section class="player-choice_dialogue">
-			<section>
-				<h2>*Challenge Accepted*</h2>
-			</section>
+		<section class="modal-background" id="instructions-modal">
+			<section class="content-wrapper">
+				<section>
+					<h1 class="modal-title">How To Play</h1>
+				</section>
 
-			<section>
-				<p>You have 2 minutes to score as much as possible. Good luck!</p>
-			</section>
-		</section>
-	</section>
-
-	<section class="modal-background" id="game-over_modal">
-		<section class="player-choice_dialogue">
-			<section>
-				<!-- TODO: Add functionality to update span -->
-				<h2>Woops! You've run out of <span id="reason"></span></h2>
-			</section>
-
-			<section>
-				Score: <span id="final-score"></span>
-			</section>
-
-			<section class="controls">
-				<button class="btn" id="retry-btn" name="Retry button">try again</button>
-				<button class="btn" id="close-btn" name="Close button">close</button>
-			</section>
-		</section>
-	</section>
-
-	<section class="modal-background" id="player-choice_modal">
-		<section class="player-choice_dialogue">
-			<section class="dialogue-header">
-				<h1 class="pick-player-text">Pick a Character</h1>
-			</section>
-
-			<section class="choice-section">
-				<img src="images/char-boy.png" id="player-sprite" alt="Game character">
+				<section>
+					<p>This is a remake of the classic arcade game, Frogger.
+					<ul>
+						<li>Your aim is to get to the water(blue tiles). Avoid the bugs!</li>
+						<li>Pick up hearts to increase lives left, and gems to boost score</li>
+						<li>Use arrow keys to move player around on laptops or swipe up, down, left or right on touch screen devices</li>
+					</ul>
+				Click continue to start or the timed mode button if you're up for a challenge.</p>
+				</section>
 
 				<section class="controls">
-					<button class="btn" id="previous" name="Previous button">previous</button>
-					<button class="btn" id="select" name="Select button">select</button>
-					<button class="btn" id="next" name="Next button">next</button>
+					<button class="btn" id="continue-button" name="Continue button">continue</button>
+					<button class="btn" id="timed-mode_button" name="Timed-mode button">timed mode</button>
 				</section>
 			</section>
 		</section>
-	</section>
 
-	<!-- collision sound from http://soundbible.com/1274-Alien-Death-Ray.html -->
-	<section id="collision-sound"></section>
+		<section class="modal-background" id="timed-mode_transition">
+			<section class="dialogue-box">
+				<section>
+					<h2>*Challenge Accepted*</h2>
+				</section>
 
-	<!-- success sound from https://freesound.org/people/original_sound/sounds/366104/ -->
-	<section id="success-sound"></section>
+				<section>
+					<p>You have 2 minutes to score as much as possible. Good luck!</p>
+				</section>
+			</section>
+		</section>
 
-	<section id="bg-sound-container">
-		<audio loop volume="0.4" id="bg-sound">
-			<source src="sounds/bg-sound.mp3">
-		</audio>
+		<section class="modal-background" id="game-over_modal">
+			<section class="dialogue-box">
+				<section>
+					<!-- TODO: Add functionality to update span -->
+					<h2>Woops! You've run out of <span id="reason"></span></h2>
+				</section>
+
+				<section>
+					Final Score: <span id="final-score"></span>
+				</section>
+
+				<section class="controls">
+					<button class="btn" id="retry-btn" name="Retry button">try again</button>
+					<button class="btn" id="close-btn" name="Close button">close</button>
+				</section>
+			</section>
+		</section>
+
+		<section class="modal-background" id="player-choice_modal">
+			<section class="dialogue-box">
+				<section class="dialogue-header">
+					<h1 class="pick-player-text">Pick a Character</h1>
+				</section>
+
+				<section class="choice-section">
+					<img src="images/char-boy.png" id="player-sprite" alt="Game character">
+
+					<section class="controls">
+						<button class="btn" id="previous" name="Previous button">previous</button>
+						<button class="btn" id="select" name="Select button">select</button>
+						<button class="btn" id="next" name="Next button">next</button>
+					</section>
+				</section>
+			</section>
+		</section>
+
+		<!-- collision sound from http://soundbible.com/1274-Alien-Death-Ray.html -->
+		<section id="collision-sound"></section>
+
+		<!-- success sound from https://freesound.org/people/original_sound/sounds/366104/ -->
+		<section id="success-sound"></section>
+
+		<section id="bg-sound-container">
+			<audio loop volume="0.4" id="bg-sound">
+				<source src="sounds/bg-sound.mp3">
+			</audio>
+		</section>
 	</section>
 
     <script src="js/resources.js"></script>
