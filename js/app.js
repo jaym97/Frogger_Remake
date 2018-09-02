@@ -216,10 +216,13 @@ document.addEventListener('keyup', function(e) {
         40: 'down'
     };
 
-    player.handleInput(allowedKeys[e.keyCode]);
+    // Prevent movement after game has ended
+    if (gameOverModal.style.display === 'none'){
+        player.handleInput(allowedKeys[e.keyCode]);
+    }
 
     //Check if player has reached water then send it back to the fields.
-    if(player.y < 0){
+    if(player.y < 0 && gameOverModal.style.display === 'none'){
         successSound.innerHTML = '<audio autoplay><source src="sounds/success.wav"></audio>';
         player.score += 10;
         setTimeout(resetPlayer, 500);

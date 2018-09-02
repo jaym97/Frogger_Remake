@@ -91,12 +91,17 @@ var Engine = (function(global) {
      * render methods.
      */
     function updateEntities(dt) {
-        allEnemies.forEach(function(enemy) {
-            enemy.update(dt);
-        });
-        player.update();
-        gem.update();
-        heart.update();
+    	if (doc.getElementById('instructions-modal').style.display === 'none'
+			&& doc.getElementById('game-over_modal').style.display === 'none'
+			&& doc.getElementById('player-choice_modal').style.display === 'none'){
+    		allEnemies.forEach(function(enemy) {
+            	enemy.update(dt);
+	        });
+
+	        player.update();
+	        gem.update();
+	        heart.update();
+    	}
     }
 
     /* This function initially draws the "game level", it will then call
@@ -156,8 +161,7 @@ var Engine = (function(global) {
 
         if (doc.getElementById('player-choice_modal').style.display === 'none'
         	&& doc.getElementById('game-over_modal').style.display === 'none'
-        	/*&& doc.getElementById('instructions-modal').style.display === 'none'*/
-        	/*&& doc.getElementById('timed-mode_transition').style.display === 'none'*/){
+        	&& doc.getElementById('instructions-modal').style.display === 'none'){
         	allEnemies.forEach(function(enemy) {
             	enemy.render();
         	});
