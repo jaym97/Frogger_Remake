@@ -129,10 +129,6 @@ class Gem {
         // Store possible coordinates for the gem
         this.xPositions = [400, 300, 200, 100];
         this.yPositions = [230, 145, 60];
-        setTimeout(() => {
-            this.x = this.xPositions[Math.floor(Math.random() * this.xPositions.length)];
-            this.y = this.yPositions[Math.floor(Math.random() * this.yPositions.length)];
-        }, Math.random() * (15000 - 8000 + 1) + 8000);
     }
 
     render() {
@@ -174,10 +170,6 @@ class Heart {
         this.xPositions = [400, 300, 200, 100];
         this.yPositions = [245, 160, 75];
 
-        setTimeout(() => {
-            this.x = this.xPositions[Math.floor(Math.random() * this.xPositions.length)];
-            this.y = this.yPositions[Math.floor(Math.random() * this.yPositions.length)];
-        }, Math.random() * (40000 - 20000 + 1) + 20000);
     }
 
     render() {
@@ -210,11 +202,6 @@ class Star {
         this.sprite = 'images/Star.png';
         this.xPositions = [400, 300, 200, 100];
         this.yPositions = [245, 160, 75];
-
-        setTimeout(() => {
-            this.x = this.xPositions[Math.floor(Math.random() * this.xPositions.length)];
-            this.y = this.yPositions[Math.floor(Math.random() * this.yPositions.length)];
-        }, Math.random() * (40000 - 30000 + 1) + 30000);
     }
 
     render() {
@@ -239,7 +226,7 @@ class Star {
             setTimeout(() => {
                 this.x = this.xPositions[Math.floor(Math.random() * this.xPositions.length)];
                 this.y = this.yPositions[Math.floor(Math.random() * this.yPositions.length)];
-            }, Math.random() * (90000 - 30000 + 1) + 30000);
+            }, Math.random() * (90000 - 45000 + 1) + 45000);
         }
     }
 }
@@ -386,6 +373,22 @@ selectBtn.addEventListener('click', () => {
     if (timeDisplay.style.display === 'block'){
         countdown();
     }
+
+    // Display collectibles only after player has been chosen
+    setTimeout(() => {
+        heart.x = heart.xPositions[Math.floor(Math.random() * heart.xPositions.length)];
+        heart.y = heart.yPositions[Math.floor(Math.random() * heart.yPositions.length)];
+    }, Math.random() * (40000 - 20000 + 1) + 20000);
+
+    setTimeout(() => {
+        star.x = star.xPositions[Math.floor(Math.random() * star.xPositions.length)];
+        star.y = star.yPositions[Math.floor(Math.random() * star.yPositions.length)];
+    }, Math.random() * (40000 - 30000 + 1) + 30000);
+
+    setTimeout(() => {
+        gem.x = gem.xPositions[Math.floor(Math.random() * gem.xPositions.length)];
+        gem.y = gem.yPositions[Math.floor(Math.random() * gem.yPositions.length)];
+    }, Math.random() * (15000 - 8000 + 1) + 8000);
 });
 
 /* ***************************** */
