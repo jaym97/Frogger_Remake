@@ -39,6 +39,7 @@ body {
 .modal-title {
 	margin: 0;
 	padding: 0;
+	font-size: 1.5em;
 }
 
 .score-panel {
@@ -162,14 +163,14 @@ body {
 }
 
 #change-mode:hover {
-	border: 2px inset #f85032;
+	border: 1px inset #f85032;
 }
 
 @media screen and (max-width: 510px) {
-	.modal-background {
+	/*.modal-background {
 		height: 120vh;
 		width: 130vw;
-	}
+	}*/
 
 	#canvas {
 		width: 500px;
@@ -178,10 +179,10 @@ body {
 }
 
 @media screen and (max-width: 415px) {
-	.modal-background {
+	/*.modal-background {
 		height: 140%;
 		width: 140vw;
-	}
+	}*/
 
 	#canvas {
 		width: 95%;
@@ -190,10 +191,10 @@ body {
 }
 
 @media screen and (max-width: 370px) {
-	.modal-background {
+	/*.modal-background {
 		height: 165vh;
 		width: 162vw;
-	}
+	}*/
 
 	#canvas {
 		width: 95%;
