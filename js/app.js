@@ -21,7 +21,8 @@ const characters = ['images/char-boy.png',
     changeModeButton = document.getElementById('change-mode'),
     timeDisplay = document.querySelector('.timer-display'),
     gameEndReason = document.getElementById('reason'),
-    successSound = document.getElementById('success-sound');
+    successSound = document.getElementById('success-sound'),
+    backgroundSound = document.getElementById('bg-sound');
 
 
 let index = 0;
@@ -92,6 +93,7 @@ class Player {
                         this.livesLeft = 5;
                         resetPlayer();
                         gameEndReason.textContent = 'lives';
+                        backgroundSound.pause();
                         endGame();
                     }
                 }
@@ -326,8 +328,7 @@ prevBtn.addEventListener('click', () => {
 
 // Event listener for select button
 selectBtn.addEventListener('click', () => {
-    const backgroundSound = document.getElementById('bg-sound');
-    backgroundSound.innerHTML = '<audio autoplay loop volume="0.4"><source src="sounds/bg-sound.mp3">'
+    backgroundSound.play();
     choiceModal.setAttribute('style', 'display: none');
     player.sprite = characters[index];
     gameOverModal.setAttribute('style', 'display: none');
@@ -346,12 +347,7 @@ retryButton.addEventListener('click',() => {
 });
 
 // Event listener for close button
-closeButton.addEventListener('click', () => {
-    gameOverModal.setAttribute('style', 'display: none');
-    // allEnemies.forEach(enemy => {
-    //     enemy.speed = 0;
-    // });
-});
+closeButton.addEventListener('click', () => gameOverModal.setAttribute('style', 'display: none'));
 
 // Event listener for continue button
 continueButton.addEventListener('click', () => {
@@ -372,10 +368,11 @@ timedModeBtn.addEventListener('click', () => {
 
 changeModeButton.addEventListener('click', () => {
     clearInterval(timerID);
+
     player.score = 0;
     player.livesLeft = 5;
-    timeDisplay.style.display === 'none' ? timeDisplay.setAttribute('style', 'display: block')
-    :   timeDisplay.setAttribute('style', 'display: none');
+    timeDisplay.style.display === 'block' ? timeDisplay.setAttribute('style', 'display: none')
+    :   timeDisplay.setAttribute('style', 'display: block');
     choiceModal.setAttribute('style', 'display: block');
 });
 
@@ -428,6 +425,7 @@ function countdown() {
         timeDisplay.textContent = `${timeLeft} seconds`;
         if(timeLeft === 0){
             gameEndReason.textContent = 'time';
+            backgroundSound.pause();
             endGame();
         }
     }, 1000);
