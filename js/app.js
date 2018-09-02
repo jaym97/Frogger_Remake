@@ -246,57 +246,59 @@ document.addEventListener('touchstart', (e) => {
 
     document.addEventListener('touchmove', (e) => {
 
-        if (clientY === null){
-            return;
+        if (gameOverModal.style.display === 'none'){
+            if (clientY === null){
+                return;
+            }
+
+            if (clientX === null){
+                return;
+            }
+
+            let deltaX, deltaY;
+
+            deltaX = e.changedTouches[0].clientX - clientX;
+            deltaY = e.changedTouches[0].clientY - clientY;
+
+            //process left swipe
+            Math.abs(deltaX) > Math.abs(deltaY) && (deltaX > 0 && player.x < 400) ? player.x += 100
+            //prevent player from going off canvas
+            : Math.abs(deltaX) > Math.abs(deltaY) && (deltaX > 0 && player.x > 400) ? player.x = 400
+
+            //process right swipe
+            : Math.abs(deltaX) > Math.abs(deltaY) && (deltaX < 0 && player.x > 0) ? player.x -= 100
+            //prevent player from going off canvas
+            : Math.abs(deltaX) > Math.abs(deltaY) && (deltaX < 0 && player.x < 0) ? player.x = 0
+
+            //process upward swipe
+            //add a check for deltaX to prevent large horizontal swipes being misread as vertical ones
+            : deltaY < 0 && (deltaX >= -10 && deltaX <= 10) && Math.abs(deltaY) > deltaX && player.y > 0 ? player.y -= 85
+            //prevent player from going off screen
+            : deltaY < 0 && player.y < 0 ? player.y = -25
+
+            //process downward swipe
+            : deltaY > 0 && (deltaX >= -10 && deltaX <= 10) && deltaY > deltaX && player.y < 400 ? player.y += 85
+            //prevent player from going off canvas
+            : deltaY > 0 && player.y > 400 ? player.y = 400
+
+            //leave player in current position if other conditions are not met
+            : player.x = player.x, player.y = player.y;
+
+            //TODO Replace with a reset function
+            if (player.y < 0 && gameOverModal.style.display === 'none'){
+                successSound.innerHTML = '<audio autoplay><source src="sounds/success.wav"></audio>';
+                player.score += 10;
+                setTimeout(resetPlayer, 200);
+                // reset enemy positions after player reaches water
+                allEnemies.forEach((enemy) => {
+                    enemy.y = enemy.possibleYValues[Math.floor(Math.random() * enemy.possibleYValues.length)];
+                    enemy.x = Math.floor(Math.random() * (0 - 500) + 1) + 0;
+                });
+            }
+
+            clientX = null;
+            clientY = null;
         }
-
-        if (clientX === null){
-            return;
-        }
-
-        let deltaX, deltaY;
-
-        deltaX = e.changedTouches[0].clientX - clientX;
-        deltaY = e.changedTouches[0].clientY - clientY;
-
-        //process left swipe
-        Math.abs(deltaX) > Math.abs(deltaY) && (deltaX > 0 && player.x < 400) ? player.x += 100
-        //prevent player from going off canvas
-        : Math.abs(deltaX) > Math.abs(deltaY) && (deltaX > 0 && player.x > 400) ? player.x = 400
-
-        //process right swipe
-        : Math.abs(deltaX) > Math.abs(deltaY) && (deltaX < 0 && player.x > 0) ? player.x -= 100
-        //prevent player from going off canvas
-        : Math.abs(deltaX) > Math.abs(deltaY) && (deltaX < 0 && player.x < 0) ? player.x = 0
-
-        //process upward swipe
-        //add a check for deltaX to prevent large horizontal swipes being misread as vertical ones
-        : deltaY < 0 && (deltaX >= -10 && deltaX <= 10) && Math.abs(deltaY) > deltaX && player.y > 0 ? player.y -= 85
-        //prevent player from going off screen
-        : deltaY < 0 && player.y < 0 ? player.y = -25
-
-        //process downward swipe
-        : deltaY > 0 && (deltaX >= -10 && deltaX <= 10) && deltaY > deltaX && player.y < 400 ? player.y += 85
-        //prevent player from going off canvas
-        : deltaY > 0 && player.y > 400 ? player.y = 400
-
-        //leave player in current position if other conditions are not met
-        : player.x = player.x, player.y = player.y;
-
-        //TODO Replace with a reset function
-        if (player.y < 0){
-            successSound.innerHTML = '<audio autoplay><source src="sounds/success.wav"></audio>';
-            player.score += 10;
-            setTimeout(resetPlayer, 200);
-            // reset enemy positions after player reaches water
-            allEnemies.forEach((enemy) => {
-                enemy.y = enemy.possibleYValues[Math.floor(Math.random() * enemy.possibleYValues.length)];
-                enemy.x = Math.floor(Math.random() * (0 - 500) + 1) + 0;
-            });
-        }
-
-        clientX = null;
-        clientY = null;
 
     }, false);
 }, false);
