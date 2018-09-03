@@ -173,7 +173,6 @@ var Engine = (function(global) {
 				gem.render();
 				heart.render();
 				star.render();
-				console.log('I just rendered...and farted');
         }
 
     }

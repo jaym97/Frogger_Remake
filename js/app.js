@@ -1,3 +1,4 @@
+'use strict';
 // Declare globals
 const characters = ['images/char-boy.png',
                     'images/char-cat-girl.png',
@@ -80,7 +81,7 @@ class Player {
                     this.score = 0;
                 }
 
-                resetPlayer();
+                this.reset();
 
                 if(this.livesLeft === 0){
                     this.livesLeft = 0;
@@ -90,7 +91,7 @@ class Player {
 
                     if (this.livesLeft === 0){
                         this.livesLeft = 5;
-                        resetPlayer();
+                        this.reset();
                         gameEndReason.textContent = 'lives';
                         backgroundSound.pause();
                         endGame();
@@ -115,6 +116,12 @@ class Player {
         : key === 'down' && this.y < 400 ? this.y += 85
         : key === 'down' && this.y > 400 ? this.y = 400
         : this.x = this.x, this.y = this.y;
+    }
+
+    // Set player back to initial position
+    reset() {
+        player.y = 315;
+        player.x = 200;
     }
 }
 
@@ -265,7 +272,7 @@ document.addEventListener('keyup', function(e) {
     if(player.y < 0 && gameOverModal.style.display === 'none'){
         successSound.innerHTML = '<audio autoplay><source src="sounds/success.wav"></audio>';
         player.score += 10;
-        setTimeout(resetPlayer, 500);
+        setTimeout(player.reset, 500);
         // reset enemy positions after player reaches water
         allEnemies.forEach((enemy) => {
             enemy.y = enemy.possibleYValues[Math.floor(Math.random() * enemy.possibleYValues.length)];
@@ -328,7 +335,7 @@ document.addEventListener('touchstart', (e) => {
             if (player.y < 0 && gameOverModal.style.display === 'none'){
                 successSound.innerHTML = '<audio autoplay><source src="sounds/success.wav"></audio>';
                 player.score += 10;
-                setTimeout(resetPlayer, 200);
+                setTimeout(player.reset, 200);
                 // reset enemy positions after player reaches water
                 allEnemies.forEach((enemy) => {
                     enemy.y = enemy.possibleYValues[Math.floor(Math.random() * enemy.possibleYValues.length)];
@@ -371,8 +378,18 @@ selectBtn.addEventListener('click', () => {
     player.sprite = characters[index];
     gameOverModal.setAttribute('style', 'display: none');
     if (timeDisplay.style.display === 'block'){
+        timeLeft = 120;
         countdown();
     }
+    player.reset();
+
+    // Reset collectibles (fix old collectibles showing up immediately after try again)
+    star.x = -100;
+    star.y = -100;
+    heart.x = -200;
+    heart.y = -150;
+    gem.x = -250;
+    gem.y = -250;
 
     // Display collectibles only after player has been chosen
     setTimeout(() => {
@@ -401,7 +418,12 @@ retryButton.addEventListener('click',() => {
 });
 
 // Event listener for close button
-closeButton.addEventListener('click', () => gameOverModal.setAttribute('style', 'display: none'));
+closeButton.addEventListener('click', () => {
+    player.livesLeft = 5;
+    player.score = 0;
+    gameOverModal.setAttribute('style', 'display: none');
+    instructionsModal.setAttribute('style', 'display: block');
+});
 
 // Event listener for continue button
 continueButton.addEventListener('click', () => {
@@ -433,12 +455,6 @@ changeModeButton.addEventListener('click', () => {
 
 /** Function Declarations **/
 
-// Set player back to initial position
-function resetPlayer() {
-    player.y = 315;
-    player.x = 200;
-}
-
 /**
 * @description Increases speed of all enemy instances based on the score of the game
 * @param {number} num
@@ -467,8 +483,9 @@ function countdown() {
 
     // Set time left to 2 minutes with the best accuracy possible
     let then;
+    timeDisplay.textContent = '120 seconds';
     timeLeft <= 0 ? then = now + 120 * 1000 : then = now + timeLeft * 1000;
-    timeDisplay.textContent = timeLeft;
+    timeDisplay.textContent = `${timeLeft} seconds`;
 
     timerID = setInterval(() => {
         timeLeft = Math.round((then - Date.now()) / 1000);
