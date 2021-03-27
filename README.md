@@ -7,7 +7,7 @@ This is my version of Udacity's classic arcade game clone project.
 
 ## How To Run
 ---
-To run the game [click here](https://jaym97.github.io/Frogger_Remake/). You will need a working internet connection to open the page.
+To run the game [click here](https://json-sudo.github.io/Frogger_Remake/). You will need a working internet connection to open the page.
 
 ## How To Play
 ---
