@@ -22,4 +22,4 @@ The game is developed with current object-oriented JavaScript using ES6 syntax a
 
 ## How To Download
 ---
-You can download this project locally by cloning on github's Desktop app from this repository or downloading a zipped file via [this link](https://jaym97.github.io/Frogger_Remake/archive/master.zip).
+You can download this project locally by cloning on github's Desktop app from this repository or downloading a zipped file via [this link](https://json-sudo.github.io/Frogger_Remake/archive/master.zip).
